@@ -1,13 +1,15 @@
 FROM python:3.10-buster
 
+ENV CONTEXT=/app
+
 LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
 
-COPY install-nginx-debian.sh /
+COPY $(CONTEXT)/install-nginx-debian.sh /
 
 RUN bash /install-nginx-debian.sh
 
 # Install requirements
-COPY requirements.txt /tmp/requirements.txt
+COPY $(CONTEXT)/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 EXPOSE 80
@@ -18,16 +20,16 @@ EXPOSE 443
 # Remove default configuration from Nginx
 RUN rm /etc/nginx/conf.d/default.conf
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
-COPY uwsgi.ini /etc/uwsgi/
+COPY $(CONTEXT)/uwsgi.ini /etc/uwsgi/
 
 # Install Supervisord
 RUN apt-get update && apt-get install -y supervisor \
 && rm -rf /var/lib/apt/lists/*
 # Custom Supervisord config
-COPY supervisord-debian.conf /etc/supervisor/conf.d/supervisord.conf
+COPY $(CONTEXT)/supervisord-debian.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Copy stop-supervisor.sh to kill the supervisor and substasks on app failure
-COPY stop-supervisor.sh /etc/supervisor/stop-supervisor.sh
+COPY $(CONTEXT)/stop-supervisor.sh /etc/supervisor/stop-supervisor.sh
 RUN chmod +x /etc/supervisor/stop-supervisor.sh
 
 # Which uWSGI .ini file should be used, to make it customizable
@@ -64,7 +66,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Add demo app
-COPY ./app /app
+COPY $(CONTEXT)/app /app
 WORKDIR /app
 
 # Run the start script, it will check for an /app/prestart.sh script (e.g. for migrations)
