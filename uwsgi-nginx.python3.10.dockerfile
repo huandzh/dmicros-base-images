@@ -7,7 +7,7 @@ COPY install-nginx-debian.sh /
 RUN bash /install-nginx-debian.sh
 
 # Install requirements
-COPY $(CONTEXT)/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 EXPOSE 80
