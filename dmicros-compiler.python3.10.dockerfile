@@ -10,7 +10,7 @@ RUN apt-get update
 RUN curl -sSL https://get.haskellstack.org/ | sh
 ENV PATH="${PATH}:/root/.local/bin"
 # ensure lts-10.4
-COPY stack.yaml ./stack.yaml
+COPY config.yaml ./stack.yaml
 RUN stack setup
 # use tsinghua mirror
 COPY config.yaml /root/.stack/config.yaml
