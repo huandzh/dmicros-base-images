@@ -1,4 +1,5 @@
-FROM hub.tenxcloud.com/dmicros/uwsgi-nginx:py310
+FROM tiangolo/uwsgi-nginx:python3.11
+#FROM hub.tenxcloud.com/dmicros/uwsgi-nginx:py310
 
 LABEL maintainer="Huan Di <hd@iamhd.top>" \
       description="This image is run-time for dmcrios api." \
